@@ -5,10 +5,9 @@ $(function(){
 
 
 let roomSizeOBJECT = {}
-let heatOutputOBJECT = {
-    "small-heater": 60000,
-    "large-heater": 120000
-}
+let heatOutputOBJECT = {}
+
+heatOutputOBJECT["small-heater"] = 60000
 let renderOnCanvasOBJECT = {}
 var currentId = ""
 var elementsAlreadyDropped = []
@@ -34,7 +33,7 @@ const item = $("div","#sub-menu").draggable({
 });
 
 
-console.log(item.draggable)
+
 
 $("img","#heater").draggable({
     containment: "document",
@@ -76,8 +75,8 @@ canvas.droppable({
         
             
         }else if(ui.helper.hasClass("small-heater")) {
-            console.log(renderOnCanvasOBJECT) 
-            console.log(currentId)
+            console.log(`renderOnCanvasOBJECT: ${renderOnCanvasOBJECT}`) 
+            console.log(`currentId: ${currentId}`)
             if(renderOnCanvasOBJECT[currentId] === true){
             node.type = "SMALL-HEATER"
             heatOutputOBJECT[node._id] = 60000
@@ -163,8 +162,7 @@ function renderDiagram(diagram){
                     var id = ui.helper.attr("id")
                     for(var i in diagram){
                         if(diagram[i]._id == id){
-                            console.log(diagram[i].width,ui.size.width)
-                            console.log(diagram[i].height,ui.size.height)
+                           
                             diagram[i].width = ui.size.width
                             diagram[i].height = ui.size.height
                         }
@@ -239,9 +237,9 @@ function renderDiagram(diagram){
                 "left": node.position.left
             }).draggable({
                 stop: function(event,ui){
-                    console.log(ui)
+                    //console.log(ui)
                     var id = ui.helper.attr("id")
-                    currentId = $(this).attr('id')
+                    //currentId = $(this).attr('id')
                     for(var i in diagram){
                         if(diagram[i]._id == id){
                             diagram[i].position.top = ui.position.top
@@ -250,7 +248,7 @@ function renderDiagram(diagram){
                     }
                     
 
-                    console.log(node.width,node.height)
+                    //console.log(node.width,node.height)
                 },
                 containment: "#drop-area",
                 snap: true,
@@ -296,24 +294,30 @@ function renderDiagram(diagram){
                 }
             
             }).droppable({
+                over: function (event, ui) { 
+                    currentId = $(this).attr('id')
+                },
                 drop: function(event,ui){
-                  
+                   
                             
                     //-----------------------------------------------------------
                     //Attribute seems to be the same as the size of the rooms in the menu
                     //try a for loop to match the ids and then retrieve the node sizes
-                    console.log("elementsAlreadyDropped")
-                    console.log(elementsAlreadyDropped)
+                
+           
                     if ((elementsAlreadyDropped.includes(ui.draggable.attr('id')))){
                         console.log("BRAND NEW ELEMENT")
                         if(ui.draggable.attr('id') in heatOutputOBJECT && roomSizeOBJECT[$(this).attr('id')] > 0){
+                            console.log("made it inside the second if statement")
                             roomSizeOBJECT[$(this).attr('id')] -=  heatOutputOBJECT[ui.draggable.attr('id')]
                             if(roomSizeOBJECT[$(this).attr('id')] <=  0){
+
                                 renderOnCanvasOBJECT[$(this).attr('id')] = false
                             }
                         }
                     }
-                    
+                    console.log(renderOnCanvasOBJECT)
+                    console.log(heatOutputOBJECT)
                     console.log(roomSizeOBJECT)
 
                     // const roomSize = calculateRoomSize(parseInt(this.style.width.replace("px","")),parseInt(this.style.height.replace("px","")))
@@ -365,6 +369,7 @@ function renderDiagram(diagram){
        
     }
 }
+
 // function rightclick() {
 //     var rightclick;
 //     var e = window.event;
