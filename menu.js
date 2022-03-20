@@ -3,19 +3,16 @@ const draggableMainRooom = document.querySelector('#main-room')
 
 $(function(){
 
-
+let heatOutputOBJECT = {
+        "small-heater": 60000
+    }
 let roomSizeOBJECT = {}
-let heatOutputOBJECT = {}
-
-heatOutputOBJECT["small-heater"] = 60000
 let renderOnCanvasOBJECT = {}
 var currentId = ""
 var elementsAlreadyDropped = []
 var renderOnCanvas = true
 var canvas = $("#drop-area")
 var diagram = [];
-
-
 
 
 //when the sub button is clicked, it toggles a dropdown on the menu
@@ -32,9 +29,7 @@ const item = $("div","#sub-menu").draggable({
 
 });
 
-
-
-
+//every img in class "heater" is draggable
 $("img","#heater").draggable({
     containment: "document",
     revert: "invalid",
@@ -51,9 +46,10 @@ canvas.droppable({
         var node = {
             _id: (new Date).getTime(),   //give them random ID so that when running a for loop you can pick unique elements from list
             position: ui.helper.position(),
-            width: ui.helper.css('width'),
-            height: ui.helper.css('height')
+            
         };
+
+
 
 
 
@@ -61,49 +57,51 @@ canvas.droppable({
         node.position.left -= canvas.position().left;
 
         if(ui.helper.hasClass("main-room")){
+            renderOnCanvasOBJECT[node._id] = true
             node.type = "MAIN-ROOM"
+            roomSizeOBJECT[node._id] = 59049
+            node.width = 250
+            node.height = 250
+            
          
         }else if(ui.helper.hasClass("bathroom")){
+            renderOnCanvasOBJECT[node._id] = true
             node.type = "BATHROOM"
+            roomSizeOBJECT[node._id] = 20000
+            node.width = 100
+            node.height = 200
 
         }else if(ui.helper.hasClass("living-room")){
             renderOnCanvasOBJECT[node._id] = true
-
             node.type = "LIVING-ROOM"
             roomSizeOBJECT[node._id] = 120000
+            node.width = 400
+            node.height = 300
+            
             
         
             
         }else if(ui.helper.hasClass("small-heater")) {
-            console.log(`renderOnCanvasOBJECT: ${renderOnCanvasOBJECT}`) 
+            console.log(renderOnCanvasOBJECT) 
             console.log(`currentId: ${currentId}`)
-            if(renderOnCanvasOBJECT[currentId] === true){
-            node.type = "SMALL-HEATER"
-            heatOutputOBJECT[node._id] = 60000
-            renderOnCanvas = true
-            if(!(elementsAlreadyDropped.includes("small-heater"))){
-                elementsAlreadyDropped.push("small-heater")
-            }else{
-                elementsAlreadyDropped.push(node._id)
-            }
-
-            
-            }else{
-                alert("HEATING COMPLETE")
-                renderOnCanvas = false
-            }
-
+            renderHeaterOnCanvas(node,currentId)
         }
         else{
             return;
         }
+
+        //diagram is rendered onto the canvas
         if(renderOnCanvas){
             diagram.push(node)                  //pushes the node into a list called "Diagram"
+            
             renderDiagram(diagram) 
+            
         }
         renderOnCanvas = true
-         
-        //diagram is rendered onto the canvas
+
+        for(var d in diagram){
+            console.log(diagram[d])
+        }
        
     }
 })
@@ -130,8 +128,8 @@ function renderDiagram(diagram){
                 "text-align": "center",
                 "line-height": "100px",
                 "cursor": "pointer",
-                "width": "250px",
-                "height": "250px",
+                "width": "243px",
+                "height": "243px",
                 "border": "4px double black",
                 "background-color": "white",
                 "position": "absolute",
@@ -146,6 +144,7 @@ function renderDiagram(diagram){
                         if(diagram[i]._id == id){
                             diagram[i].position.top = ui.position.top
                             diagram[i].position.left = ui.position.left
+                            
                         }
                     }
                 },
@@ -156,18 +155,55 @@ function renderDiagram(diagram){
                 containment: "#drop-area",                                   //i.e. make it so that it doesnt move when another room is dropped after resized
                 minWidth: 100,
                 minHeight: 100,
-                start: function(event,ui){
+                stop: function(event,ui){
                     
                     
                     var id = ui.helper.attr("id")
+                    
                     for(var i in diagram){
                         if(diagram[i]._id == id){
-                           
                             diagram[i].width = ui.size.width
                             diagram[i].height = ui.size.height
+                            console.log(diagram[i])
+                        
+                        }
+                        
+                    }
+                    node.width = ui.size.width
+                    node.height = ui.size.height
+                    
+                    
+                    const roomSize = calculateRoomSize(node.width,node.height)
+                    roomSizeOBJECT[$(this).attr('id')] = roomSize
+                    
+                }
+            }).droppable({
+                hoverClass: "drop-hover",
+                over: function (event, ui) { 
+                    currentId = $(this).attr('id')
+                },
+                drop: function(event,ui){
+                   
+                
+           
+                    if ((elementsAlreadyDropped.includes(ui.draggable.attr('id')))){
+                        if(ui.draggable.attr('id') in heatOutputOBJECT && roomSizeOBJECT[$(this).attr('id')] > 0){
+                           roomSizeOBJECT[$(this).attr('id')] -=  heatOutputOBJECT[ui.draggable.attr('id')]
+                            if(roomSizeOBJECT[$(this).attr('id')] <=  0){
+                                renderOnCanvasOBJECT[$(this).attr('id')] = false
+                            }
                         }
                     }
-                }
+                    console.log(renderOnCanvasOBJECT)
+                    console.log(heatOutputOBJECT)
+                    console.log(roomSizeOBJECT)
+
+                    // const roomSize = calculateRoomSize(parseInt(this.style.width.replace("px","")),parseInt(this.style.height.replace("px","")))
+                    // if(checkCapacity(draggedItem.draggable("option","heat"), roomSize)){
+                    
+
+ 
+                },    
             })
             console.log(dom)
             canvas.append(dom)
@@ -206,17 +242,58 @@ function renderDiagram(diagram){
             }).attr("id",node._id).resizable({                              
                 containment: "#drop-area",
                 minWidth: 50,
-                minHeight: 70,                                   
-                start: function(event,ui){
+                minHeight: 70, 
+                maxWidth: 200,
+                maxHeight:300,                                  
+                stop: function(event,ui){
+                    var id = ui.helper.attr("id")
                     for(var i in diagram){
                         if(diagram[i]._id == id){
-                            console.log(diagram[i].width,ui.size.width)
-                            console.log(diagram[i].height,ui.size.height)
-                            diagram[i].width = ui.size.width                
+                            console.log("diagram size before")
+                            console.log(diagram[i].width)
+                            console.log(diagram[i].height)
+                            console.log("ui size before assigning to diagram")
+                            console.log(ui.size.width)
+                            console.log(ui.size.height)
+                            diagram[i].width = ui.size.width
                             diagram[i].height = ui.size.height
+                        
+                        }
+                        
+                    }
+
+                    node.width = ui.size.width
+                    node.height = ui.size.height
+                    // console.log(node.width,node.height)
+                    
+                    const roomSize = calculateRoomSize(node.width,node.height)
+                    roomSizeOBJECT[$(this).attr('id')] = roomSize
+                }
+            }).droppable({
+                over: function (event, ui) { 
+                    currentId = $(this).attr('id')
+                },
+                drop: function(event,ui){
+                   
+                
+                    if ((elementsAlreadyDropped.includes(ui.draggable.attr('id')))){
+                        if(ui.draggable.attr('id') in heatOutputOBJECT && roomSizeOBJECT[$(this).attr('id')] > 0){                          
+                            roomSizeOBJECT[$(this).attr('id')] -=  heatOutputOBJECT[ui.draggable.attr('id')]
+                            if(roomSizeOBJECT[$(this).attr('id')] <=  0){
+                                renderOnCanvasOBJECT[$(this).attr('id')] = false
+                            }
                         }
                     }
-                }
+                    console.log(renderOnCanvasOBJECT)
+                    console.log(heatOutputOBJECT)
+                    console.log(roomSizeOBJECT)
+
+                    // const roomSize = calculateRoomSize(parseInt(this.style.width.replace("px","")),parseInt(this.style.height.replace("px","")))
+                    // if(checkCapacity(draggedItem.draggable("option","heat"), roomSize)){
+                    
+
+ 
+                },    
             })
             console.log(dom)
             canvas.append(dom)
@@ -262,8 +339,7 @@ function renderDiagram(diagram){
                     
                     
                     var id = ui.helper.attr("id")
-                   
-
+                    
                     for(var i in diagram){
                         if(diagram[i]._id == id){
                             console.log("diagram size before")
@@ -277,8 +353,6 @@ function renderDiagram(diagram){
                         
                         }
                         
-                        console.log(diagram[i].width)
-                        console.log(diagram[i].height)
                     }
                        
                     
@@ -288,6 +362,8 @@ function renderDiagram(diagram){
                     
                     const roomSize = calculateRoomSize(node.width,node.height)
                     roomSizeOBJECT[$(this).attr('id')] = roomSize
+
+                    console.log(roomSizeOBJECT)
                     
                     // this.setAttribute("roomSize", roomSize);
                     
@@ -299,19 +375,11 @@ function renderDiagram(diagram){
                 },
                 drop: function(event,ui){
                    
-                            
-                    //-----------------------------------------------------------
-                    //Attribute seems to be the same as the size of the rooms in the menu
-                    //try a for loop to match the ids and then retrieve the node sizes
-                
-           
+                    console.log(currentId)
                     if ((elementsAlreadyDropped.includes(ui.draggable.attr('id')))){
-                        console.log("BRAND NEW ELEMENT")
                         if(ui.draggable.attr('id') in heatOutputOBJECT && roomSizeOBJECT[$(this).attr('id')] > 0){
-                            console.log("made it inside the second if statement")
                             roomSizeOBJECT[$(this).attr('id')] -=  heatOutputOBJECT[ui.draggable.attr('id')]
                             if(roomSizeOBJECT[$(this).attr('id')] <=  0){
-
                                 renderOnCanvasOBJECT[$(this).attr('id')] = false
                             }
                         }
@@ -325,8 +393,7 @@ function renderDiagram(diagram){
                     
 
  
-                },
-                containment: this    
+                },    
             })
             
             canvas.append(dom)
@@ -383,6 +450,21 @@ const checkCapacity = (heat,roomSize) => {
     return (roomSize >= 100000 && heat >= 10 ? true : alert("you need 2 heaters"))
 }
 
+const renderHeaterOnCanvas = (node,currentId)=>{
+    if(renderOnCanvasOBJECT[currentId] === true){
+        node.type = "SMALL-HEATER"
+        heatOutputOBJECT[node._id] = 60000
+        renderOnCanvas = true
+            if(!(elementsAlreadyDropped.includes("small-heater"))){
+                elementsAlreadyDropped.push("small-heater")
+            }else{
+                elementsAlreadyDropped.push(node._id)
+            }
+        }else{
+            alert("HEATING COMPLETE")
+            renderOnCanvas = false
+        }
+}
 const calculateRoomSize = (width,height) =>{
     return width*height
 }
