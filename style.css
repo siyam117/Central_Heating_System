@@ -29,7 +29,7 @@ body {
 
 .menu {
   width: 300px;
-  height: 700px;
+  height: 1200px;
   left: 0;
   top: 100;
   background-color: #1b1b1b;
@@ -140,7 +140,7 @@ body {
   width: 1000px;
   height: 600px;
   left: 400;
-  border: 5px dashed black;
+  border: 3px dashed black;
 }
 
 .pipe-canvas {

@@ -42,6 +42,7 @@ var ctx = pipeCanvas.getContext('2d')
 
 //when the sub button is clicked, it toggles a dropdown on the menu
 $('.sub-btn').click(function(){
+
     $(this).next('.sub-menu').slideToggle();
     $(this).find('.dropdown').toggleClass('rotate');
 })
@@ -66,12 +67,11 @@ $("img","#heater").draggable({
 
 });
 
-$("div","#boiler").draggable({
-    
+const boiler = $("div","#boiler").draggable({
     zIndex: zIndexCount,
     containment: "document",
     revert: "invalid",
-    helper: "clone",
+    
     cursor: "move",
 
 });
@@ -283,7 +283,8 @@ function renderDiagram(diagram){
 
             
 
-        }else if(node.type === "CHS"){                    
+        }else if(node.type === "CHS"){          
+                     
             const element = document.createElement("div")
             element.className = "main-room"
             html = "<div>connection</div>";
@@ -295,7 +296,7 @@ function renderDiagram(diagram){
                 "width": "90px",
                 "height": "90px",
                 "border": "4px double black",
-                //"background-color": "white",
+                "background-color": "white",
                 "position": "absolute",
                 "top": node.position.top,
                 "left": node.position.left,
@@ -343,8 +344,11 @@ function renderDiagram(diagram){
                 }
             })
 
+            
+
             console.log(dom)
             canvas.append(dom)
+            
 //<------------------------------------------------------BATHROOM----------------------------------------------------------------------->
         }else if(node.type === "BATHROOM"){
             html = "<div>Bath</div>";
@@ -555,8 +559,8 @@ function renderDiagram(diagram){
                     for(var i in diagram){
                         
                         if(diagram[i]._id == id){
-                            diagram[i].position.top = ui.position.top - 50
-                            diagram[i].position.left = ui.position.left  - 55
+                            diagram[i].position.top = ui.position.top -50
+                            diagram[i].position.left = ui.position.left-55
                         }
                     }
                 },
@@ -712,8 +716,8 @@ class Pipe {
                 for(let item of diagram) {
                     if((item.type == "SMALL-HEATER" || item.type == "LARGE-HEATER") && !item.connected) {
                         // find distance from pipe to heater
-                        let heaterX = item.position.left + 50
-                        let heaterY = item.position.top + 15
+                        let heaterX = item.position.left + 100
+                        let heaterY = item.position.top + 70
 
                         // vertical pipes
                         if(x == this.selectedNode.x) {
