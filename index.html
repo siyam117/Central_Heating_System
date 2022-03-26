@@ -7,13 +7,15 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.0/jquery.min.js"></script>
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.9/jquery-ui.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jcanvas/20.2.0/min/jcanvas.min.js"></script>
+    
     <link rel="stylesheet" href="//code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
 
     <script type="text/javascript"></script>
     <title>CentralHeating</title>
 </head>
 <body class="body">
-    <div class="title">Central Heating System</div>
+    <div class="title">TEST Central Heating System <div id="heat-output" class="heat-output"> Heat output: <div id="heat-output-value" class="heat-output-value"></div> </div></div>
     
 
     <section id="menu" class="menu">
@@ -23,19 +25,20 @@
                 <div id="room main-room" class="main-room" draggable="true">Bedroom</div>
                 <div id="room bathroom" class="bathroom" draggable="true">Bathr</div>
                 <div id="room living-room" class="living-room" draggable="true">Living Room</div>
+                <div id="room chs" class="chs" draggable="true">connection</div>
             </div>
             <a class="sub-btn">Heaters <i class="fas fa-angle-right dropdown"></i></a>
             <div id="heater" class="sub-menu">
                 <img id="small-heater" class="small-heater" src="media/855644.png" alt="heater">
                 <img id="large-heater" class="large-heater" src="media/855644.png" alt="heater">
                 
+                
             </div>
 
         </div>
     </section>
-
     <section id="drop-area" class="drop-area">
-       
+        <canvas id="pipe-canvas" class="pipe-canvas"></canvas>
     </section>
 
     
@@ -47,6 +50,7 @@
 
 
     <script src="menu.js"></script>
+    
     <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
   <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
 </body>
