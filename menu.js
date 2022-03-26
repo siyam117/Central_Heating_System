@@ -66,6 +66,16 @@ $("img","#heater").draggable({
 
 });
 
+$("div","#boiler").draggable({
+    
+    zIndex: zIndexCount,
+    containment: "document",
+    revert: "invalid",
+    helper: "clone",
+    cursor: "move",
+
+});
+
 querySelectList.forEach(item => {
     console.log(`SHOULD OUPTUT ITEM HERE ${item}`)
     item.addEventListener('click', event => {
