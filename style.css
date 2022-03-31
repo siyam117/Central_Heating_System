@@ -7,12 +7,14 @@ body {
   font-size: 40px;
   background-color: darkslategrey;
   margin: 10px;
-  padding: 27px;
+  padding: 15px;
   bottom: 10;
   text-align: center;
   font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
   width: 100%;
+  height: 70px;
   left: -20;
+  padding-top: 50px;
 }
 
 .heat-output {
@@ -26,12 +28,59 @@ body {
   display: inline;
   font-size: 30;
 }
+.stats {
+  position: relative;
+  top: -90px;
+  border: 0 2px #fff;
+  height: 15%;
+  text-align: right;
+  left: -90;
+}
 
+.room-counter,
+.heater-counter {
+  font-size: 20px;
+  display: inline-block;
+  font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
+}
+
+#room-count,
+#heater-count {
+  color: white;
+  font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
+  font-size: 20px;
+  line-height: 40px;
+}
+
+.confirm-button {
+  border: none;
+  border-radius: 15px;
+  font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
+  color: black;
+  font-size: 20px;
+  margin-top: 10px;
+  margin-left: 40px;
+  background-color: rgb(255, 255, 255);
+  padding: 2px 15px;
+  box-shadow: 0 1px rgb(255, 255, 255);
+  margin-bottom: 1px;
+}
+
+.confirm-button:hover {
+  background-color: rgb(18, 139, 18);
+  color: white;
+  cursor: pointer;
+}
+
+.confirm-button:active {
+  box-shadow: 0 0.2px #fff;
+  transform: translateY(1px);
+}
 .menu {
   width: 300px;
-  height: 1200px;
+  height: 100%;
   left: 0;
-  top: 100;
+  top: 135;
   background-color: #1b1b1b;
   position: absolute;
 }
@@ -76,7 +125,8 @@ body {
   padding: 10;
 }
 
-.main-room {
+.main-room,
+.kitchen {
   font-size: 15px;
   text-align: center;
   line-height: 100px;
@@ -127,9 +177,23 @@ body {
   margin-top: 10;
   cursor: pointer;
   position: relative;
-  width: 90px;
+  width: 50px;
   height: 90px;
   border: 5px double red;
+  background-color: white;
+}
+
+.thermostat {
+  font-size: 15px;
+  text-align: center;
+  line-height: 100px;
+  left: 100;
+  margin-top: 10;
+  cursor: pointer;
+  position: relative;
+  width: 80px;
+  height: 80px;
+  border: 5px double limegreen;
   background-color: white;
 }
 
@@ -140,7 +204,7 @@ body {
   width: 1000px;
   height: 600px;
   left: 400;
-  border: 3px dashed black;
+  border: 2px dashed black;
 }
 
 .pipe-canvas {
@@ -173,5 +237,61 @@ body {
   height: 150px;
   padding: 20px;
   padding-left: 60px;
+  cursor: pointer;
+}
+
+#setHeaterOutput {
+  display: none;
+  text-align: center;
+  background-color: #000000aa;
+  border: 5px solid black;
+  color: white;
+  position: absolute;
+  width: 400px;
+  left: 700px;
+  top: 300px;
+  height: 250px;
+  border-radius: 25px;
+  z-index: 9999999;
+}
+
+#closeHeaterDiv {
+  color: white;
+  position: absolute;
+  left: 5px;
+  top: 5px;
+  background: none;
+  border: none;
+  font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
+  font-size: 32px;
+}
+
+#heaterOutputValue {
+  -webkit-appearance: none;
+  width: 200px;
+  height: 10px;
+  border-radius: 5px;
+  background: #999999;
+  outline: none;
+  opacity: 1;
+}
+
+#heaterOutputValue::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #ffffff;
+  border: 3px solid black;
+  cursor: pointer;
+}
+
+#heaterOutputValue::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #ffffff;
+  border: 3px solid black;
   cursor: pointer;
 }

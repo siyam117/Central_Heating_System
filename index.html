@@ -9,38 +9,64 @@
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.9/jquery-ui.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jcanvas/20.2.0/min/jcanvas.min.js"></script>
     
-    <link rel="stylesheet" href="//code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
 
     <script type="text/javascript"></script>
     <title>CentralHeating</title>
 </head>
 <body class="body">
-    <div class="title">TEST Central Heating System <div id="heat-output" class="heat-output"> Heat output: <div id="heat-output-value" class="heat-output-value"></div> </div></div>
+    <!-- <div class="starting-page">
+        <button id="start" class="start">Start</button>
+    </div> -->
+    <div class="title">TEST Central Heating System 
+        <div id="stats" class="stats">
+            <div id="room-count" class="room-count">Rooms: <div id="room-counter" class="room-counter"></div> </div>
+            <div id="heater-count" class="heater-count">Heaters: <div id="heater-counter" class="heater-counter"></div> </div>
+            <button id="confirm-button" class="confirm-button">Confirm Floor Plan</button>
+        </div>
+    </div>
     
 
     <section id="menu" class="menu">
         <div id="room" class="room">
             <a class="sub-btn">Rooms <i class="fas fa-angle-right dropdown"></i></a>
-            <div id="sub-menu" class="sub-menu room">  
+            <div id="sub-menu" class="sub-menu">  
                 <div id="room main-room" class="main-room" draggable="true">Bedroom</div>
                 <div id="room bathroom" class="bathroom" draggable="true">Bathr</div>
                 <div id="room living-room" class="living-room" draggable="true">Living Room</div>
+                <div id="room kitchen" class="kitchen" draggable="true">Kitchen</div>
             </div>
             <a class="sub-btn">Heaters <i class="fas fa-angle-right dropdown"></i></a>
-            <div id="heater" class="sub-menu heater">
+            <div id="heater" class="sub-menu">
                 <img id="small-heater" class="small-heater" src="media/855644.png" alt="heater">
-                <img id="large-heater" class="large-heater" src="media/855644.png" alt="heater">
+                <img id="large-heater" class="large-heater" src="media/855644.png" alt="heater"> 
             </div>
-            <a class="sub-btn">Boiler <i class="fas fa-angle-right dropdown"></i></a>
+            <a class="sub-btn">Connections <i class="fas fa-angle-right dropdown boiler"></i></a>
             <div id="boiler" class="sub-menu boiler">
-                <div id="room chs" class="chs" draggable="true">connection</div>
+                <div id="room chs" class="chs" draggable="true">Boiler</div>
+                <div id="thermostat" class="thermostat" draggable="true">Thermostat</div>
             </div>
+
         </div>
     </section>
     <section id="drop-area" class="drop-area">
         <canvas id="pipe-canvas" class="pipe-canvas"></canvas>
     </section>
+    <div id="setHeaterOutput">
+        <h1>Set heater output</h1><hr>
+        <input type="range" min="10000" max="200000" step="1000" id="heaterOutputValue"><br>
+        <span id="heaterOutput"></span>
+        <button id="closeHeaterDiv">X</button>
+    </div>
+
     
+    
+    
+
+
+
+
+
     <script src="menu.js"></script>
     
     <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
