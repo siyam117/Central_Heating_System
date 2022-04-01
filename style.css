@@ -5,7 +5,7 @@ body {
   position: relative;
   color: white;
   font-size: 40px;
-  background-color: darkslategrey;
+  background-color: rgb(0, 100, 103);
   margin: 10px;
   padding: 15px;
   bottom: 10;
@@ -15,6 +15,68 @@ body {
   height: 70px;
   left: -20;
   padding-top: 50px;
+  
+}
+
+.starting-page{
+  background-color: rgb(255, 255, 255);
+  left: 0px;
+  top: 0px;
+  width: 2000px;
+  height: 1000px;
+  z-index: 99999999999;
+  position: absolute;
+}
+
+.starting-page-title{
+  font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
+  font-size: 40px;
+  position: relative;
+  padding-top: 20px;
+  color: darkcyan;
+}
+
+.bullet-point{
+  position: relative;
+  text-align: left;
+  left: 30%;
+  color: black;
+  font-size: 20px;
+  top: 100px;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  top: 20px;
+  
+  
+}
+
+.info {
+  outline: solid 2px rgb(81, 81, 81);
+  color: rgb(0, 0, 0);
+  box-shadow: #1b1b1b;
+  text-align: center;
+  justify-content: center;
+  background-color: white;
+  height: 35%;
+  width: 50%;
+  /* bring your own prefixes */
+  transform: translate(30%, 30%);
+  border-radius: 5px;
+}
+
+.start-button{
+  position: relative;
+  width: 200px;
+  height: 50px;
+  top: 37%;
+  background-color: darkcyan;
+  color: #ffffff;
+  border-radius: 7px;
+  cursor: pointer;
+  font-size: 20px;
+}
+
+.start-button:hover{
+  background-color: rgb(0, 69, 69);
 }
 
 .heat-output {
@@ -67,7 +129,7 @@ body {
 }
 
 .confirm-button:hover {
-  background-color: rgb(18, 139, 18);
+  background-color: rgb(0, 145, 158);
   color: white;
   cursor: pointer;
 }
@@ -108,7 +170,7 @@ body {
 }
 
 .menu .room .sub-menu {
-  background: darkslategrey;
+  background: rgb(0, 100, 103);
   padding: 10px;
   display: none;
 }
@@ -150,7 +212,7 @@ body {
   position: relative;
   width: 50px;
   height: 100px;
-  border: 5px solid black;
+  border: 5px double black;
   background-color: white;
   place-items: auto, auto;
 }
@@ -193,7 +255,7 @@ body {
   position: relative;
   width: 80px;
   height: 80px;
-  border: 5px double limegreen;
+  border: 5px double darkcyan;
   background-color: white;
 }
 
@@ -202,7 +264,7 @@ body {
   left: 0;
   position: relative;
   width: 1000px;
-  height: 600px;
+  height: 80%;
   left: 400;
   border: 2px dashed black;
 }
@@ -258,12 +320,19 @@ body {
 #closeHeaterDiv {
   color: white;
   position: absolute;
-  left: 5px;
-  top: 5px;
+  text-align: center;
+  left: 40%;
+  top: 150px;
   background: none;
-  border: none;
+  border: 2px solid white;
+  border-radius: 5px;
   font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
-  font-size: 32px;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+#closeHeaterDiv:hover {
+  background-color: #1b1b1b;
 }
 
 #heaterOutputValue {
@@ -293,5 +362,78 @@ body {
   border-radius: 50%;
   background: #ffffff;
   border: 3px solid black;
+  cursor: pointer;
+}
+
+.final-output {
+  position: absolute;
+  display: none;
+  text-align: center;
+  background: rgba(0, 0, 0, 0.9);
+  border: 3px solid white;
+  color: white;
+  position: absolute;
+  width: 80%;
+  height: 80%;
+  border-radius: 25px;
+  z-index: 9999999;
+  top: 120px;
+  left: 120px;
+}
+
+.final-output-title {
+  font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
+  font-size: 30px;
+  position: relative;
+  padding-top: 20px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid white;
+}
+
+.final-output .text {
+  font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
+  font-size: 70px;
+  position: relative;
+  text-align: left;
+  left: 15px;
+  top: 20%;
+  padding-bottom: 40px;
+}
+
+.is-area-covered-text {
+  font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
+  font-size: 20px;
+  position: relative;
+  text-align: left;
+  left: 15px;
+  top: 20%;
+  padding-bottom: 10px;
+  color: red;
+  
+}
+
+#floor-plan-total,
+#heat-plan-total {
+  font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
+  display: inline-block;
+  font-size: 80px;
+  position: relative;
+  text-align: left;
+  left: 15px;
+  top: 10px;
+  padding: 10px;
+}
+
+#close-final-output {
+  color: white;
+  position: absolute;
+  text-align: center;
+  left: 6px;
+  top: 6px;
+  background: none;
+  border: 2px none white;
+  border-radius: 5px;
+  font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
+  font-size: 40px;
   cursor: pointer;
 }

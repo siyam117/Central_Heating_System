@@ -5,6 +5,11 @@ $(function(){
 const roomCounterDiv = document.getElementById("room-counter")
 const heaterCounterDiv = document.getElementById("heater-counter")
 const myElement = document.getElementById('drop-area');
+const startButton = document.getElementById("start-button")
+
+startButton.addEventListener('click', function(){
+    document.getElementById("starting-page").style.display = 'none'
+})
 
 
 //normal variables
@@ -25,6 +30,7 @@ let heatOutputOBJECT = {
 let roomSizeOBJECT = {}
 let renderOnCanvasOBJECT = {}
 let roomsInTotalFloorPlanOBJECT = {}
+let heatersInTotalFloorPlan = []
 
 //list variables
 var elementsAlreadyDropped = []
@@ -46,7 +52,6 @@ var querySelectList = [document.getElementById('small-heater')]
 
 
 var confirmButton = document.getElementById("confirm-button").addEventListener('click',function(){
-
     if(this.innerHTML === "confirm heat plan"){
         this.style.display = 'none'
         confirmHeatPlanPressed = true
@@ -78,6 +83,13 @@ document.getElementById("closeHeaterDiv").onclick = () => {
     heaterOpen = false
     heaterOutputDiv.style.display = "none"
 }
+
+
+document.getElementById('close-final-output').onclick =() =>{
+    document.getElementById('final-output').style.display = 'none'
+}
+
+
 
 
 
@@ -136,9 +148,6 @@ canvas.droppable({
     //on drop of a room, it creates a node with ID and current Position
     drop: function(event,ui){
         zIndexCount +=1
-
-        
-        
         
         var node = {
             _id: (new Date).getTime(),   //give them random ID so that when running a for loop you can pick unique elements from list
@@ -216,7 +225,6 @@ canvas.droppable({
                 renderHeaterOnCanvas(node,currentId,"large-heater")
                 largeHeaterCounter+=1
             }
-            
             node.width = 150
             node.height = 50
             heaterCounter +=1
@@ -226,14 +234,12 @@ canvas.droppable({
         }else if(ui.helper.hasClass("chs")){
                 renderItemOnCanvas('chs')
                 node.type = "CHS"
-                
                 node.width = 50
                 node.height = 100
 
         }else if(ui.helper.hasClass("thermostat")){
                 renderOnCanvasOBJECT[node._id] = true
                 node.type = "thermostat"
-                
                 node.width = 80
                 node.height = 80
                 thermostatPlaced = true //allow to edit heater outputs
@@ -473,7 +479,7 @@ function renderDiagram(diagram){
                 "position": "absolute",
                 "top": node.position.top,
                 "left": node.position.left,
-                "border" : "5px double limegreen"
+                "border" : "5px double darkcyan"
             }).draggable({
                 snap: true,
                 snapTolerance: 30,
@@ -503,7 +509,7 @@ function renderDiagram(diagram){
                 "cursor": "pointer",
                 "width": node.width,
                 "height": node.height,
-                "border": "5px solid black",
+                "border": "4px double black",
                 //"background-color": "white",
                 "position": "absolute",
                 "top": node.position.top,
@@ -653,10 +659,6 @@ function renderDiagram(diagram){
 
                     }
 
-                    // const roomSize = calculateRoomSize(parseInt(this.style.width.replace("px","")),parseInt(this.style.height.replace("px","")))
-                    // if(checkCapacity(draggedItem.draggable("option","heat"), roomSize)){
-                    
-
  
                 },    
             
@@ -766,6 +768,17 @@ function renderDiagram(diagram){
                 let element = document.getElementById("heat-output-value")
                 
             })
+
+            $(dom).on('click',function(){
+                let element = document.getElementById("heat-output-value")
+                currentId = $(this).attr('id')
+                if(thermostatPlaced && !heaterOpen) {
+                    sliderEl.value = heatOutputOBJECT[currentId]
+                    sliderOutputEl.innerHTML = heatOutputOBJECT[currentId]
+                    heaterOutputDiv.style.display = "block"
+                    heaterOpen = currentId
+                } 
+            })
             canvas.append(dom)
         }
         
@@ -790,14 +803,6 @@ function renderDiagram(diagram){
         }
     }
 }
-
-// function rightclick() {
-//     var rightclick;
-//     var e = window.event;
-//     if (e.which) rightclick = (e.which == 3);
-//     else if (e.button) rightclick = (e.button == 2);
-//     alert(rightclick); // true or false, you can trap right click here by if comparison
-// }
 
 
 
@@ -852,18 +857,7 @@ const renderItemOnCanvas = (type) => {
             return renderOnCanvas
         }
     }
-        
-    // }else if(type === "room" || type === "heater"){
-    //     if(confirmFloorPlanPressed){
-    //         renderOnCanvas = false
-    //         alert("You have pressed confirm, unable to make changes to blueprint")
-    //         roomCounter -= 1
-    //         return renderOnCanvas
-    //     }else if(!confirmFloorPlanPressed){
-    //         renderOnCanvas = true
-    //         return renderOnCanvas
-    //     }
-    // }
+
 }
 
 // renders the the initail heater on Canvas by changing the 'renderOnCanvas' value to true or falss
@@ -996,6 +990,7 @@ class Pipe {
     }
 
     end() {
+       
         console.log("END PIPELINE")
         pipeAdding = false
         pipeCanvas.style.zIndex = -1
@@ -1003,26 +998,39 @@ class Pipe {
         this.makeParallel()
         ctx.clearRect(0,0,pipeCanvas.width,pipeCanvas.height)
         for(let p in pipelines) pipelines[p].draw()
+        let HeatPlanTotalArea = 0 
 
         for(const key in roomsInTotalFloorPlanOBJECT){
             
-            floorPlanTotalArea += roomsInTotalFloorPlanOBJECT[key]
-            
+            floorPlanTotalArea += roomsInTotalFloorPlanOBJECT[key] 
         }
-        console.log(`total floor plan area: ${floorPlanTotalArea}`)
-        console.log(`total heat area: ${smallHeaterCounter*60000 + largeHeaterCounter*120000} `)
-        //console.log(roomsDroppedList)
-        // for(var room in roomsDroppedList){
-        //     roomsDroppedList[room].draggable('disable')
-        // }
-        for (let i = 0; i < myElement.children.length; i++) {
-            var divDrag = myElement.children[i]
-            console.log(divDrag)
-            divDrag.draggable = false
-          }
+        for(const key in heatOutputOBJECT){
+           
+            if(key !== "small-heater" && key !== "large-heater"){
+                heatersInTotalFloorPlan.push(heatOutputOBJECT[key])
+            }
+        }
         
-        console.log(`small heaters = ${smallHeaterCounter}`)
-        console.log(`large heaters = ${largeHeaterCounter}`)
+        HeatPlanTotalArea = heatersInTotalFloorPlan.reduce((a, b) => a + b, 0)
+        document.getElementById('floor-plan-total').innerHTML = floorPlanTotalArea
+        document.getElementById('heat-plan-total').innerHTML = HeatPlanTotalArea
+        document.getElementById('final-output').style.display = 'block'
+
+        if(floorPlanTotalArea > HeatPlanTotalArea){
+            document.getElementById("is-area-covered-text").innerHTML = "! Total area of floor plan does not have sufficient heat. Please use thermostat to increase the heat of the heaters !"
+        }else{
+            var parentDiv = document.querySelector("#final-output")
+            const img = document.createElement("img")
+            img.src = "media/green-tick.png"
+            img.style.width = "100px"
+            img.style.height = "90px"
+            img.style.position = "relative"
+            img.style.display = "block"
+            img.style.top  = "60px"
+            img.style.left = "15px"
+
+            parentDiv.appendChild(img)
+        }        
     }
 
     // create parallel pipelines
@@ -1123,7 +1131,6 @@ window.addEventListener('mousemove', e => {
         ctx.clearRect(0,0,pipeCanvas.width,pipeCanvas.height)
         for(let p in pipelines) pipelines[p].draw()
     }
-
 })
 
 window.addEventListener('keydown', e => {
@@ -1134,7 +1141,6 @@ window.addEventListener('keydown', e => {
             ctx.clearRect(0,0,pipeCanvas.width,pipeCanvas.height)
             for(let p in pipelines) pipelines[p].draw()
         }
-
     }
 })
 
@@ -1184,7 +1190,7 @@ Heaters(Draggable){
 }
 
 pipes {
-    should connect from the main to each heater
+    should connect from the main to each heater  (DONE)
 }
 
 heating power{
@@ -1202,47 +1208,3 @@ heating power{
 
 
 //---------------------------------------------------------------------------------------------------------------------------------------
-
-
-
-
-
-
-
-/*
-Functionalities to include:
-
-Rooms(Draggable){
-    can be dragged to the drop area     (DONE)
-    can be dragged back to the menu     (DONE)
-
-    Large and small rooms               (DONE)
-
-    Large requires 500j of energy       (DONE)
-    small requires 150j of energy       (DONE)
-
-    
-}
-Heaters(Draggable){
-    can be dragged to the drop area      (DONE)
-    can be dragged back to the menu       (DONE)
-
-    Large and small Heaters
-
-    Large = 500j output                 (DONE)
-    small = 150j output                 (DONE)
-
-
-}
-
-pipes {
-    should connect from the main to each heater
-}
-
-heating power{
-    generate certain power output       (DONE)
-} 
-
-
-
-*/
